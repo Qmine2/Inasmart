@@ -26,7 +26,7 @@ export default function Header({ lang }: { lang: Lang }) {
         <Link href={`/${lang}`} className="flex items-center gap-2.5 font-display text-xl font-bold text-ink">
           <span className="block h-[38px] w-[38px] overflow-hidden rounded-[10px] bg-indigo-mid">
             <Image
-              src="/Inasmart/logo-mark.jpg"
+              src="/logo-mark.jpg"
               alt="INA SMART"
               width={38}
               height={38}

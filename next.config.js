@@ -4,8 +4,6 @@ const nextConfig = {
   trailingSlash: true,
   output: "export",
 
-  basePath: "/Inasmart",
-
   images: {
     unoptimized: true,
   },

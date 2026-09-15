@@ -3,6 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
   output: "export",
+
+  basePath: "/Inasmart",
+
+  images: {
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;

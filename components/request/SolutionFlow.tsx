@@ -1,34 +1,49 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import RequestSidebar from "./RequestSidebar";
 import StepProgress from "./StepProgress";
-import { CALENDLY_URL, CONTACT_EMAIL, t, useCases } from "@/lib/content";
+import { CALENDLY_URL, t, useCases, sectors } from "@/lib/content";
 import type { Lang } from "@/lib/locale";
+
+const EMAILJS_SERVICE_ID  = "service_4h80vod";
+const EMAILJS_TEMPLATE_ID = "template_6v16li9";
+const EMAILJS_PUBLIC_KEY  = "iB6CKhTgEst7P38GM";
 
 const inputClass =
   "w-full rounded-control border border-input-border bg-white px-3.5 py-3 text-sm text-ink transition-colors duration-200 focus:border-primary focus:outline-none";
 const labelClass = "mb-2 block text-[13px] font-semibold text-ink";
 
-export default function SolutionFlow({
-  lang,
-  initialSolPicks,
-  initialSectorIdx,
-}: {
-  lang: Lang;
-  initialSolPicks: number[];
-  initialSectorIdx: number;
-}) {
+export default function SolutionFlow({ lang }: { lang: Lang }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const copy = t(lang);
   const s = copy.solution;
   const f = copy.form;
 
   const [step, setStep] = useState(0);
-  const [solPicks, setSolPicks] = useState<number[]>(initialSolPicks);
+  const [solPicks, setSolPicks] = useState<number[]>(() => {
+    const sectorId = searchParams?.get("sector");
+    const sector = sectors.find((sc) => sc.id === sectorId);
+    const sectorSolPicks = sector
+      ? useCases.map((u, i) => (u.sectors.includes(sector.id) ? i : -1)).filter((i) => i > -1)
+      : [];
+
+    const explicitSolPicks = (searchParams?.get("solutions") ?? "")
+      .split(",")
+      .map((v) => Number.parseInt(v, 10))
+      .filter((v) => Number.isInteger(v) && v >= 0 && v < useCases.length);
+
+    return explicitSolPicks.length > 0 ? explicitSolPicks : sectorSolPicks;
+  });
   const [auditOptIn, setAuditOptIn] = useState(true);
-  const [sectorIdx, setSectorIdx] = useState(initialSectorIdx);
+  const [sectorIdx, setSectorIdx] = useState(() => {
+    const sectorId = searchParams?.get("sector");
+    const sector = sectors.find((sc) => sc.id === sectorId);
+    return sector ? sector.chipIndex : -1;
+  });
   const [challenge, setChallenge] = useState("");
   const [outcome, setOutcome] = useState("");
   const [site, setSite] = useState("");
@@ -39,6 +54,7 @@ export default function SolutionFlow({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "error">("idle");
 
   function toggleSolPick(i: number) {
     setSolPicks((picks) => (picks.includes(i) ? picks.filter((x) => x !== i) : picks.concat(i)));
@@ -53,18 +69,42 @@ export default function SolutionFlow({
     window.scrollTo(0, 0);
   }
 
-  function goNext(e: FormEvent) {
+  async function goNext(e: FormEvent) {
     e.preventDefault();
     if (step === 2) {
       const pickedNames = solPicks.map((i) => (lang === "ar" ? useCases[i].ar.title : useCases[i].en.title)).join(", ") || "—";
       const sector = sectorIdx > -1 ? f.sectorChips[sectorIdx] : "—";
-      const subject = encodeURIComponent(`Solution brief — ${org}`);
-      const body = encodeURIComponent(
-        `Organisation: ${org}\nContact name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nSector: ${sector}\nStarting point(s): ${pickedNames}\nFree audit: ${auditOptIn ? "Yes" : "No"}\n\nThe challenge:\n${challenge}\n\nThe outcome wanted:\n${outcome}\n\nSite / spaces: ${site}\nTarget timeline: ${timeline}\nIndicative budget: ${budget}\nWho else is involved: ${involved}`
-      );
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-      setStep(3);
-      window.scrollTo(0, 0);
+      const time = new Date().toLocaleString();
+
+      setSubmitStatus("loading");
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            email,
+            org,
+            name,
+            phone,
+            time,
+            "Starting point": pickedNames,
+            sector,
+            challenge,
+            outcome,
+            Site: site,
+            Timeline: timeline,
+            Budget: budget,
+            Stakeholders: involved,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
+        setSubmitStatus("idle");
+        setStep(3);
+        window.scrollTo(0, 0);
+      } catch (err) {
+        console.error("EmailJS error:", err);
+        setSubmitStatus("error");
+      }
       return;
     }
     setStep((st) => Math.min(3, st + 1));
@@ -300,20 +340,27 @@ export default function SolutionFlow({
               )}
 
               {step < 3 && (
-                <div className="mt-7.5 flex items-center justify-between gap-4 border-t border-hairline-soft pt-5.5">
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    className="rounded-control border border-input-border bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors duration-200 hover:border-primary hover:text-primary"
-                  >
-                    {f.back}
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3 text-sm font-semibold text-white transition-opacity duration-200 hover:opacity-90"
-                  >
-                    {step === 2 ? s.submitLabel : f.continueLabel}
-                  </button>
+                <div className="mt-7.5 flex flex-col gap-3 border-t border-hairline-soft pt-5.5">
+                  {submitStatus === "error" && (
+                    <p className="text-sm text-red-500">Something went wrong. Please try again.</p>
+                  )}
+                  <div className="flex items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={goBack}
+                      disabled={submitStatus === "loading"}
+                      className="rounded-control border border-input-border bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors duration-200 hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {f.back}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submitStatus === "loading"}
+                      className="rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3 text-sm font-semibold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {submitStatus === "loading" ? "…" : step === 2 ? s.submitLabel : f.continueLabel}
+                    </button>
+                  </div>
                 </div>
               )}
             </form>

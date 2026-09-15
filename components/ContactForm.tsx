@@ -1,22 +1,42 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { CONTACT_EMAIL, t } from "@/lib/content";
+import emailjs from "@emailjs/browser";
+import { t } from "@/lib/content";
 import type { Lang } from "@/lib/locale";
+
+const EMAILJS_SERVICE_ID = "service_4h80vod";
+const EMAILJS_TEMPLATE_ID = "template_4visgwm";
+const EMAILJS_PUBLIC_KEY = "iB6CKhTgEst7P38GM";
 
 export default function ContactForm({ lang }: { lang: Lang }) {
   const copy = t(lang).contactPage;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const subject = encodeURIComponent(`Website contact from ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    setSent(true);
+    setStatus("loading");
+
+    const time = new Date().toLocaleString();
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        { name, email, message, time },
+        EMAILJS_PUBLIC_KEY
+      );
+      setStatus("sent");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setStatus("error");
+    }
   }
 
   return (
@@ -59,11 +79,17 @@ export default function ContactForm({ lang }: { lang: Lang }) {
           className="rounded-control border border-input-border px-3.5 py-3 text-sm font-body transition-colors duration-200 focus:border-primary focus:outline-none"
         />
       </div>
+
+      {status === "error" && (
+        <p className="text-sm text-red-500">Something went wrong. Please try again.</p>
+      )}
+
       <button
         type="submit"
-        className="mt-2 self-start rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3.5 text-sm font-bold text-white transition-opacity duration-200 hover:opacity-90"
+        disabled={status === "loading" || status === "sent"}
+        className="mt-2 self-start rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3.5 text-sm font-bold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {sent ? copy.sent : copy.send}
+        {status === "loading" ? "…" : status === "sent" ? copy.sent : copy.send}
       </button>
     </form>
   );

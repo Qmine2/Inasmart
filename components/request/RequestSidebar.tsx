@@ -31,7 +31,7 @@ export default function RequestSidebar({
         <p className="m-0" dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>
           {CONTACT_PHONE}
         </p>
-        <p className="mt-1" dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>
+        <p className="mt-1 block" dir="ltr" style={{ unicodeBidi: "isolate" }}>
           {CONTACT_EMAIL}
         </p>
       </div>

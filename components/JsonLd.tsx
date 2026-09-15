@@ -45,7 +45,7 @@ export default function JsonLd({ lang }: { lang: Lang }) {
           { "@type": "Place", name: "GCC" },
         ],
         sameAs: [WHATSAPP_URL],
-        slogan: lang === "ar" ? "ابتكار • تكامل • أتمتة" : "Innovate • Integrate • Automate",
+        slogan: lang === "ar" ? "اشترِ • ابنِ • حلّ" : "Buy • Build • Solve",
         knowsAbout: [
           "System integration",
           "Audio visual solutions",

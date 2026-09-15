@@ -2,19 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import RequestSidebar from "./RequestSidebar";
 import StepProgress from "./StepProgress";
-import { CALENDLY_URL, CONTACT_EMAIL, flattenProducts, t } from "@/lib/content";
+import { CALENDLY_URL, flattenProducts, t } from "@/lib/content";
 import type { Lang } from "@/lib/locale";
+
+const EMAILJS_SERVICE_ID  = "service_4h80vod";
+const EMAILJS_TEMPLATE_ID = "template_6v16li9";
+const EMAILJS_PUBLIC_KEY  = "iB6CKhTgEst7P38GM";
 
 const inputClass =
   "w-full rounded-control border border-input-border bg-white px-3.5 py-3 text-sm text-ink transition-colors duration-200 focus:border-primary focus:outline-none";
 const labelClass = "mb-2 block text-[13px] font-semibold text-ink";
 
-export default function TechnologyFlow({ lang, initialProductIds = [] }: { lang: Lang; initialProductIds?: string[] }) {
+export default function TechnologyFlow({ lang }: { lang: Lang }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const copy = t(lang);
   const tc = copy.technology;
   const f = copy.form;
@@ -22,9 +28,10 @@ export default function TechnologyFlow({ lang, initialProductIds = [] }: { lang:
   const catalogue = useMemo(() => flattenProducts(lang), [lang]);
 
   const [step, setStep] = useState(0);
-  const [picks, setPicks] = useState<number[]>(() =>
-    initialProductIds.map((id) => catalogue.findIndex((c) => c.id === id)).filter((i) => i > -1)
-  );
+  const [picks, setPicks] = useState<number[]>(() => {
+    const initialProductIds = (searchParams?.get("product") ?? "").split(",").filter(Boolean);
+    return initialProductIds.map((id) => catalogue.findIndex((c) => c.id === id)).filter((i) => i > -1);
+  });
   const [pickQuery, setPickQuery] = useState("");
   const [spec, setSpec] = useState("");
   const [constraints, setConstraints] = useState("");
@@ -36,6 +43,7 @@ export default function TechnologyFlow({ lang, initialProductIds = [] }: { lang:
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "error">("idle");
 
   const results = catalogue
     .map((item, i) => ({ item, i }))
@@ -49,16 +57,40 @@ export default function TechnologyFlow({ lang, initialProductIds = [] }: { lang:
     setPicks((p) => (p.includes(i) ? p.filter((x) => x !== i) : p.concat(i)));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const pickedNames = picks.map((i) => catalogue[i]?.sub).join(", ") || "—";
-    const subject = encodeURIComponent(`Technology request — ${org}`);
-    const body = encodeURIComponent(
-      `Organisation: ${org}\nContact name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nFrom catalogue: ${pickedNames}\n\nSpecific requirement:\n${spec}\n\nStandards or constraints:\n${constraints}\n\nQuantity / volumes: ${quantity}\nDelivery location: ${delivery}\nTarget timeline: ${timeline}\nIndicative budget: ${budget}`
-    );
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    setStep(1);
-    window.scrollTo(0, 0);
+    const pickedNames = picks.map((i) => catalogue[i]?.sub).join(", ") || "none";
+    const time = new Date().toLocaleString();
+
+    setSubmitStatus("loading");
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          email,
+          org,
+          name,
+          phone,
+          time,
+          "Starting point": "Path B",
+          sector: pickedNames,
+          challenge: spec || "none",
+          outcome: constraints || "none",
+          Site: delivery || "none",
+          Timeline: timeline,
+          Budget: budget,
+          Stakeholders: quantity || "none",
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+      setSubmitStatus("idle");
+      setStep(1);
+      window.scrollTo(0, 0);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setSubmitStatus("error");
+    }
   }
 
   return (
@@ -200,20 +232,27 @@ export default function TechnologyFlow({ lang, initialProductIds = [] }: { lang:
                     </div>
                   </div>
 
-                  <div className="mt-7.5 flex items-center justify-between gap-4 border-t border-hairline-soft pt-5.5">
-                    <button
-                      type="button"
-                      onClick={() => router.push(`/${lang}`)}
-                      className="rounded-control border border-input-border bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors duration-200 hover:border-primary hover:text-primary"
-                    >
-                      {f.back}
-                    </button>
-                    <button
-                      type="submit"
-                      className="rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3 text-sm font-semibold text-white transition-opacity duration-200 hover:opacity-90"
-                    >
-                      {tc.submitLabel}
-                    </button>
+                  <div className="mt-7.5 flex flex-col gap-3 border-t border-hairline-soft pt-5.5">
+                    {submitStatus === "error" && (
+                      <p className="text-sm text-red-500">Something went wrong. Please try again.</p>
+                    )}
+                    <div className="flex items-center justify-between gap-4">
+                      <button
+                        type="button"
+                        onClick={() => router.push(`/${lang}`)}
+                        disabled={submitStatus === "loading"}
+                        className="rounded-control border border-input-border bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors duration-200 hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {f.back}
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={submitStatus === "loading"}
+                        className="rounded-control bg-[linear-gradient(135deg,#1E93E8,#1668C9)] px-5.5 py-3 text-sm font-semibold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                      >
+                        {submitStatus === "loading" ? "…" : tc.submitLabel}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

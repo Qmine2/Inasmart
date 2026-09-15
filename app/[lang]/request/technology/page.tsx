@@ -18,15 +18,14 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
   };
 }
 
-export default function RequestTechnologyPage({
-  params,
-  searchParams,
-}: {
-  params: { lang: string };
-  searchParams: { product?: string };
-}) {
-  const lang: Lang = isValidLocale(params.lang) ? params.lang : DEFAULT_LOCALE;
-  const initialProductIds = (searchParams.product ?? "").split(",").filter(Boolean);
+import { Suspense } from "react";
 
-  return <TechnologyFlow lang={lang} initialProductIds={initialProductIds} />;
+export default function RequestTechnologyPage({ params }: { params: { lang: string } }) {
+  const lang: Lang = isValidLocale(params.lang) ? params.lang : DEFAULT_LOCALE;
+
+  return (
+    <Suspense fallback={<div className="py-22 text-center text-ink-muted">Loading...</div>}>
+      <TechnologyFlow lang={lang} />
+    </Suspense>
+  );
 }

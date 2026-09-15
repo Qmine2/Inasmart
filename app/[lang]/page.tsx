@@ -112,16 +112,20 @@ export default function HomePage({ params }: { params: { lang: string } }) {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {useCases.map((u) => (
-              <div
+              <Link
                 key={u.id}
-                className="rounded-card border border-hairline bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-blue"
+                href={`/${lang}/use-cases#${u.id}`}
+                className="group flex flex-col rounded-card border border-hairline bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-blue hover:shadow-[0_12px_32px_-16px_rgba(20,18,58,0.25)]"
               >
                 <div className="flex h-8.5 w-8.5 items-center justify-center rounded-[9px] bg-[linear-gradient(135deg,#CDF3FB,#E6F0FD)] font-display text-xs font-bold text-badge-ink-deep">
                   {u.mono}
                 </div>
-                <h3 className="mt-3.5 text-[15px] font-bold text-ink">{lang === "ar" ? u.ar.title : u.en.title}</h3>
+                <h3 className="mt-3.5 text-[15px] font-bold text-ink transition-colors duration-200 group-hover:text-primary">{lang === "ar" ? u.ar.title : u.en.title}</h3>
                 <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">{lang === "ar" ? u.ar.short : u.en.short}</p>
-              </div>
+                <span className="mt-auto pt-3.5 text-[12px] font-semibold text-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  {lang === "ar" ? "عرض التفاصيل ←" : "View details →"}
+                </span>
+              </Link>
             ))}
           </div>
         </div>

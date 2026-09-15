@@ -19,29 +19,14 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
   };
 }
 
-export default function RequestSolutionPage({
-  params,
-  searchParams,
-}: {
-  params: { lang: string };
-  searchParams: { solutions?: string; sector?: string };
-}) {
+import { Suspense } from "react";
+
+export default function RequestSolutionPage({ params }: { params: { lang: string } }) {
   const lang: Lang = isValidLocale(params.lang) ? params.lang : DEFAULT_LOCALE;
 
-  // `?sector=<id>` (from the sectors page) pre-selects the sector chip and every
-  // use case tagged with that sector. Resolved by id rather than by index so the
-  // links keep working as use cases are added.
-  const sector = sectors.find((s) => s.id === searchParams.sector);
-  const sectorSolPicks = sector
-    ? useCases.map((u, i) => (u.sectors.includes(sector.id) ? i : -1)).filter((i) => i > -1)
-    : [];
-
-  const explicitSolPicks = (searchParams.solutions ?? "")
-    .split(",")
-    .map((v) => Number.parseInt(v, 10))
-    .filter((v) => Number.isInteger(v) && v >= 0 && v < useCases.length);
-
-  const initialSolPicks = explicitSolPicks.length > 0 ? explicitSolPicks : sectorSolPicks;
-
-  return <SolutionFlow lang={lang} initialSolPicks={initialSolPicks} initialSectorIdx={sector ? sector.chipIndex : -1} />;
+  return (
+    <Suspense fallback={<div className="py-22 text-center text-ink-muted">Loading...</div>}>
+      <SolutionFlow lang={lang} />
+    </Suspense>
+  );
 }

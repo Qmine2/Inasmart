@@ -14,8 +14,8 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
         : "Robotics Labs, Smart Classrooms & Meeting Room AV in Qatar | INA SMART",
     description:
       lang === "ar"
-        ? "حلول جاهزة قابلة للتخصيص في قطر: مختبرات روبوتات ومختبرات STEM والذكاء الاصطناعي، وفصول ذكية بشاشات تفاعلية، ومصانع ذكية، وقاعات اجتماعات بأنظمة صوتية ومرئية."
-        : "Prebuilt solutions ready to adapt in Qatar — robotics lab setup, STEM and AI labs, smart classrooms with interactive displays, smart factory monitoring, and meeting room AV with video conferencing.",
+        ? "حلول جاهزة قابلة للتخصيص في قطر: مختبرات روبوتات ومختبرات STEM، وفصول ذكية بشاشات تفاعلية، ومصانع ذكية، وقاعات اجتماعات بأنظمة صوتية ومرئية."
+        : "Prebuilt solutions ready to adapt in Qatar — robotics lab setup, STEM labs, smart classrooms with interactive displays, smart factory monitoring, and meeting room AV with video conferencing.",
     keywords: [
       "Robotics lab setup Qatar",
       "Smart classroom Qatar",

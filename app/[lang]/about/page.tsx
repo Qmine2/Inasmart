@@ -20,6 +20,7 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       "ICT solutions Qatar",
       "Smart technology solutions Qatar",
       "Digital transformation Qatar",
+      "Custom branded technology Qatar",
     ],
     alternates: { canonical: `/${lang}/about` },
   };

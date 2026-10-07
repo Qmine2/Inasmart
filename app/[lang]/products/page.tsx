@@ -17,6 +17,7 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
     keywords: [
       "Injection moulding machine Qatar",
       "Cobot Qatar",
+      "Robot arm Qatar",
       "Autonomous mobile robot Qatar",
       "Holographic display Qatar",
       "3D printer Qatar",
@@ -25,6 +26,10 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       "Advanced technology supplier Qatar",
       "Technology sourcing Qatar",
       "STEM lab supplier Qatar",
+      "INA Spatial Creation Table Qatar",
+      "INA Air Interaction Wall Qatar",
+      "AI Quality Inspection Station Qatar",
+      "Educational mobile robot Qatar",
     ],
     alternates: { canonical: `/${lang}/products` },
   };

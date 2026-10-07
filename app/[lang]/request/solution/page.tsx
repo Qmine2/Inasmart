@@ -14,7 +14,16 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       lang === "ar"
         ? "صِف التحدي وسنعود بمفهوم حل وميزانية تقديرية — أتمتة صناعية وذكاء اصطناعي وتكامل أنظمة ولوحات ذكية في قطر."
         : "Describe the challenge and we reply with a solution concept and indicative budget — industrial automation, AI, system integration and smart dashboards in Qatar.",
-    keywords: ["System integrator Qatar", "Industrial automation Qatar", "Automation solutions Qatar", "Digital transformation Qatar", "Smart dashboards Qatar"],
+    keywords: [
+      "System integrator Qatar",
+      "Industrial automation Qatar",
+      "Automation solutions Qatar",
+      "Digital transformation Qatar",
+      "Smart dashboards Qatar",
+      "AI solutions Qatar",
+      "Warehouse automation Qatar",
+      "Smart meeting room Qatar",
+    ],
     alternates: { canonical: `/${lang}/request/solution` },
   };
 }

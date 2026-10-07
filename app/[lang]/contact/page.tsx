@@ -15,7 +15,14 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       lang === "ar"
         ? "تواصل مع إينا سمارت في الدوحة، قطر عبر الهاتف أو واتساب أو البريد الإلكتروني — تكامل الأنظمة وتوريد التقنية المتقدمة والأتمتة والحلول الذكية."
         : "Contact INA SMART in Doha, Qatar by phone, WhatsApp or email — system integration, advanced technology sourcing, automation and smart solutions.",
-    keywords: ["System integrator Qatar", "Technology sourcing Qatar", "ICT solutions Qatar", "AV solutions Qatar"],
+    keywords: [
+      "System integrator Qatar",
+      "Technology sourcing Qatar",
+      "ICT solutions Qatar",
+      "AV solutions Qatar",
+      "Custom branded technology Qatar",
+      "AI solutions Qatar",
+    ],
     alternates: { canonical: `/${lang}/contact` },
   };
 }

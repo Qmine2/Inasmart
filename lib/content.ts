@@ -43,6 +43,13 @@ export const SEO_KEYWORDS_BRAND = [
   "Warehouse tracking system Qatar",
   "System integration Qatar",
   "Smart dashboards Qatar",
+  "Smart meeting room Qatar",
+  "Wireless presentation Qatar",
+  "Custom branded technology Qatar",
+  "AI lab for schools Qatar",
+  "Educational robots Qatar",
+  "Warehouse automation Qatar",
+  "Inventory tracking Qatar",
 ];
 
 export const SEO_KEYWORDS_MARKET = [
@@ -101,6 +108,15 @@ export const SEO_KEYWORDS_PRODUCTS = [
   "Service robot Qatar",
   "Smart podium Qatar",
   "STEM workstation Qatar",
+  "Interactive smart board Qatar",
+  "Robotics lab for schools Qatar",
+  "3D printer for schools Qatar",
+  "Robot arm Qatar",
+  "AI quality inspection Qatar",
+  "INA Spatial Creation Table Qatar",
+  "INA Air Interaction Wall Qatar",
+  "AI Quality Inspection Station Qatar",
+  "Educational mobile robot Qatar",
 ];
 
 export const SEO_KEYWORDS = [...SEO_KEYWORDS_MARKET, ...SEO_KEYWORDS_PRODUCTS, ...SEO_KEYWORDS_BRAND];
@@ -131,6 +147,23 @@ export const SEO_KEYWORDS_AR = [
   "شاشة هولوغرام قطر",
   "كشك خدمة ذاتية قطر",
   "رفوف مستودعات قطر",
+  "سبورة ذكية تفاعلية قطر",
+  "مختبر روبوتات للمدارس قطر",
+  "روبوتات تعليمية قطر",
+  "طابعة ثلاثية الأبعاد للمدارس قطر",
+  "مختبر ذكاء اصطناعي للمدارس قطر",
+  "عرض لاسلكي قطر",
+  "منتجات تقنية مخصصة قطر",
+  "ذراع روبوت قطر",
+  "فحص الجودة بالذكاء الاصطناعي قطر",
+  "أتمتة المستودعات قطر",
+  "تتبع المخزون قطر",
+  "طاولة تفاعلية ذكية قطر",
+  "جدار تفاعلي باللمس والحركة قطر",
+  "محطة فحص الجودة بالذكاء الاصطناعي قطر",
+  "روبوت تعليمي متحرك قطر",
+  "روبوت بشري بالذكاء الاصطناعي قطر",
+  "مصنع ذكي قطر",
 ];
 
 type NavKey = "home" | "useCases" | "products" | "sectors" | "about" | "contact";

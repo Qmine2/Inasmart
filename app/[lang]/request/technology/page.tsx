@@ -13,7 +13,15 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       lang === "ar"
         ? "أرسل مواصفاتك واحصل على عرض سعر — توريد التقنية المتقدمة والمعدات من شبكات محلية ودولية في قطر، مع مراجعة فنية قبل الشراء."
         : "Send your specification and get a quote — advanced technology and equipment supply through local and international sourcing networks in Qatar, with an engineer's review before you order.",
-    keywords: ["Advanced technology supplier Qatar", "Technology sourcing Qatar", "China technology sourcing Qatar", "Injection molding machine supplier Qatar", "Barcode system Qatar"],
+    keywords: [
+      "Advanced technology supplier Qatar",
+      "Technology sourcing Qatar",
+      "China technology sourcing Qatar",
+      "Injection molding machine supplier Qatar",
+      "Barcode system Qatar",
+      "Custom branded technology Qatar",
+      "Educational robots Qatar",
+    ],
     alternates: { canonical: `/${lang}/request/technology` },
   };
 }

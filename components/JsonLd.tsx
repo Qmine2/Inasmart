@@ -3,6 +3,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
   SITE_URL,
+  SOCIAL_LINKS,
   WHATSAPP_URL,
   focusAreas,
   productCategories,
@@ -44,7 +45,12 @@ export default function JsonLd({ lang }: { lang: Lang }) {
           { "@type": "Country", name: "Qatar" },
           { "@type": "Place", name: "GCC" },
         ],
-        sameAs: [WHATSAPP_URL],
+        sameAs: [
+          WHATSAPP_URL,
+          SOCIAL_LINKS.linkedin,
+          SOCIAL_LINKS.instagram,
+          SOCIAL_LINKS.facebook,
+        ],
         slogan: lang === "ar" ? "اشترِ • ابنِ • حلّ" : "Buy • Build • Solve",
         knowsAbout: [
           "System integration",

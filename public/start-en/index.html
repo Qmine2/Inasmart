@@ -5,6 +5,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tell us your problem | INA SMART</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/favicon-512x512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://inasmart.com/icons/og-image-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://inasmart.com/icons/og-image-1200x630.png">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1644521057255777');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1644521057255777&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <style>
   :root {
@@ -59,7 +88,7 @@
   <p class="lead">Tick anything that fits your school, then describe it in your own words. We read every message and reply with a clear direction or a first meeting. No cost, no obligation.</p>
   <div class="rule"></div>
 
-  <form action="https://formspree.io/f/mrpbarkw" method="POST">
+  <form action="https://formspree.io/f/mrpbarkw" method="POST" onsubmit="if(typeof fbq==='function'){fbq('track','Lead');}">
     <input type="hidden" name="_subject" value="New enquiry from the INA SMART leaflet (EN)">
     <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off">
 

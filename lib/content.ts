@@ -10,6 +10,12 @@ export const CONTACT_ADDRESS = { en: "Doha, Qatar", ar: "الدوحة، قطر" 
 // TODO: replace with the real production domain before launch.
 export const SITE_URL = "https://inasmart.com";
 
+export const SOCIAL_LINKS = {
+  instagram: "https://instagram.com/inasmartqatar",
+  linkedin: "https://www.linkedin.com/company/inasmartqatar/",
+  facebook: "https://www.facebook.com/share/1A8KNxU6ha/",
+};
+
 /**
  * Two keyword groups.
  *

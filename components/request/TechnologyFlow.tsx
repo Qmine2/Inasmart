@@ -9,6 +9,7 @@ import RequestSidebar from "./RequestSidebar";
 import StepProgress from "./StepProgress";
 import { CALENDLY_URL, flattenProducts, t } from "@/lib/content";
 import type { Lang } from "@/lib/locale";
+import { trackPixel } from "@/lib/pixel";
 
 const EMAILJS_SERVICE_ID  = "service_4h80vod";
 const EMAILJS_TEMPLATE_ID = "template_6v16li9";
@@ -84,6 +85,7 @@ export default function TechnologyFlow({ lang }: { lang: Lang }) {
         },
         EMAILJS_PUBLIC_KEY
       );
+      trackPixel("Lead");
       setSubmitStatus("idle");
       setStep(1);
       window.scrollTo(0, 0);

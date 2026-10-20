@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import emailjs from "@emailjs/browser";
 import { t } from "@/lib/content";
 import type { Lang } from "@/lib/locale";
+import { trackPixel } from "@/lib/pixel";
 
 const EMAILJS_SERVICE_ID = "service_4h80vod";
 const EMAILJS_TEMPLATE_ID = "template_4visgwm";
@@ -29,6 +30,7 @@ export default function ContactForm({ lang }: { lang: Lang }) {
         { name, email, message, time },
         EMAILJS_PUBLIC_KEY
       );
+      trackPixel("Lead");
       setStatus("sent");
       setName("");
       setEmail("");
